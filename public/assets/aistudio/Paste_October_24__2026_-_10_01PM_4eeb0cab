@@ -1,0 +1,752 @@
+# BUILD NEXA'S ADVANCED LONG-TERM MEMORY SYSTEM
+
+Act as a senior AI engineer, full-stack developer, AI memory architect, and product designer.
+
+I have already built my own AI agent called NEXA inside Google AI Studio. I want you to upgrade my EXISTING project by implementing a complete, production-minded, persistent, editable, categorized long-term memory system.
+
+This is not a request to create a new chatbot or a separate demo application. Work directly within the existing NEXA project. Preserve its current UI, branding, chat experience, agent behavior, existing integrations, and working features.
+
+First inspect the current project structure, frontend framework, backend architecture, Gemini API integration, authentication, and existing data persistence. Then implement the feature using the project's existing architecture wherever possible.
+
+Do not just provide instructions, mockups, pseudocode, or a list of recommendations. Implement the actual working feature, including the UI, data model, memory extraction, persistence, retrieval, editing, and deletion.
+
+If something is unclear, make the safest reasonable engineering decision and continue. Do not replace working functionality unnecessarily.
+
+---
+
+## 1. MAIN OBJECTIVE
+
+Build an advanced NEXA Memory System that allows the agent to:
+
+1. Automatically identify important information from conversations.
+2. Save useful memories to persistent storage.
+3. Retrieve relevant memories in future conversations, including after refreshing the page or starting a new chat.
+4. Organize memories into clearly defined categories.
+5. Allow the user to inspect, edit, add, delete, search, and manually save memories.
+6. Let the user control automatic memory behavior.
+7. Use recalled memories naturally when answering questions.
+8. Prevent duplicate, contradictory, irrelevant, or low-value memories from accumulating.
+9. Clearly distinguish confirmed facts from uncertain interpretations.
+10. Never claim that something was saved unless the persistence operation actually succeeded.
+
+Memory must survive browser refreshes, application restarts, and new conversations, subject to the connected database and account configuration.
+
+---
+
+## 2. CREATE A MEMORY CENTER BUTTON
+
+Add a clearly visible button to the existing NEXA interface, preferably in the top navigation bar or another natural location that matches the existing UI.
+
+Button label: "Memory" or "Memory Center"
+
+Use a suitable memory/brain icon consistent with the current design system.
+
+When clicked, open a dedicated Memory Center panel, drawer, modal, or full-page view. Choose the layout that best fits the existing application.
+
+The Memory Center must not disrupt the current chat interface or remove any existing functionality.
+
+### Memory Center header
+
+Display:
+
+- Title: NEXA Memory Center
+- Total number of stored memories
+- Search memories input
+- Automatic Memory toggle
+- Manual Save button
+- Add Memory button
+- Refresh/sync control if useful
+
+Include clear loading, empty, error, and success states.
+
+---
+
+## 3. MEMORY CATEGORIES
+
+Create the following categories as navigable tabs, filters, or sidebar sections.
+
+### A. All Memories
+Show all saved memories, regardless of category.
+
+### B. Identity
+Store stable information about the user, such as:
+
+- Preferred name or nickname
+- Occupation or roles
+- Skills and expertise
+- Long-term identity-related facts
+- Personal goals that are explicitly confirmed
+
+### C. Preferences
+Store recurring preferences, such as:
+
+- Communication style
+- Preferred response language
+- Preferred answer length
+- Tools and technologies the user prefers
+- Workflow preferences
+- Likes, dislikes, and explicitly stated working preferences
+
+### D. Life
+Store meaningful life context, such as:
+
+- Ongoing education or career context
+- Important personal plans
+- Major projects outside the immediate conversation
+- Significant life changes
+- Relevant context the user explicitly wants remembered
+
+### E. Active
+Store current, unfinished, or time-sensitive context, such as:
+
+- Projects currently being built
+- Tasks in progress
+- Unresolved problems
+- Current goals
+- Pending decisions
+- Next steps and deadlines
+
+Active memories must support status updates and must not remain marked active indefinitely when a project is completed or abandoned.
+
+### F. Relationships
+Store useful relationship context only when appropriate, relevant, and authorized by the user.
+
+Examples:
+
+- Important collaborators
+- Project partners
+- User-defined roles of people in a project
+- Relevant professional relationships
+
+Avoid unnecessary personal details about third parties.
+
+### G. Milestones
+Store meaningful achievements and significant events, such as:
+
+- Project launches
+- Completed projects
+- Major decisions
+- Important accomplishments
+- Significant progress updates
+
+Include dates when known.
+
+### H. Behaviors
+Store confirmed recurring patterns and working habits, such as:
+
+- Typical workflow
+- Repeated project-building habits
+- Consistent learning preferences
+- Recurring productivity preferences
+
+Do not turn one-time actions or speculative personality judgments into permanent facts.
+
+Every memory must have one primary category. Support optional tags for cross-category filtering.
+
+---
+
+## 4. MEMORY CARD DESIGN
+
+Display each memory as an individual, readable card.
+
+Each card should show:
+
+- Memory title
+- Memory content
+- Category
+- Optional tags
+- Created date
+- Last updated date
+- Last recalled date, if available
+- Source: manually saved or automatically extracted
+- Confidence or verification status where appropriate
+- Edit button
+- Delete button
+
+Use a clean, compact interface that works on desktop and mobile.
+
+Add sorting options:
+
+- Recently updated
+- Recently created
+- Oldest first
+- Alphabetical
+- Most frequently recalled, if usage data is available
+
+Add search functionality across titles, content, and tags.
+
+Support filtering by category, source, verification status, and active/completed status where applicable.
+
+---
+
+## 5. MANUAL SAVE BUTTON — CRITICAL FEATURE
+
+Create a prominent "Manual Save" button at the top of the Memory Center.
+
+When clicked, open a form with these fields:
+
+- Memory title
+- Memory content
+- Category dropdown
+- Tags
+- Optional date
+- Optional project/status fields where applicable
+
+Buttons:
+
+- Save Memory
+- Cancel
+
+The category dropdown must contain all eight categories.
+
+When the user saves a memory:
+
+1. Validate the required fields.
+2. Persist the memory to the actual database.
+3. Update the interface after successful persistence.
+4. Show a clear success message only after the write succeeds.
+5. Display an actionable error if the write fails.
+6. Prevent accidental duplicate submissions.
+7. Keep the form data available if a save fails so the user does not lose their work.
+
+The manual save feature must work independently of the AI's automatic memory extraction.
+
+A manual memory should be marked as user-created and user-verified.
+
+---
+
+## 6. EDIT, ADD, AND DELETE MEMORIES
+
+The user must have complete practical control over their stored memories.
+
+### Edit
+
+When the user clicks Edit, open a form prefilled with the current memory.
+
+Allow editing:
+
+- Title
+- Content
+- Category
+- Tags
+- Status
+- Date, if applicable
+
+Save changes to persistent storage.
+
+Track updated timestamps and handle errors without losing the user's changes.
+
+### Add
+
+Allow creating a new memory directly from the Memory Center, without requiring a conversation.
+
+### Delete
+
+Allow deletion of individual memories.
+
+Show a confirmation dialog before deletion. Clearly identify which memory will be deleted.
+
+After confirmed deletion, remove it from persistent storage and update the UI.
+
+Do not implement fake deletion that only hides the card.
+
+### Bulk actions
+
+If practical, support selecting multiple memories for deletion or category reassignment. Require confirmation for destructive bulk actions.
+
+Do not silently overwrite a manually edited memory with a newly extracted AI memory.
+
+---
+
+## 7. AUTOMATIC MEMORY EXTRACTION ENGINE
+
+This is one of the most important parts of the system.
+
+NEXA must analyze new conversation messages and identify information worth remembering for future conversations.
+
+However, do not save every message or every sentence.
+
+Build a structured memory extraction process that identifies:
+
+### High-value memories
+
+Examples:
+
+- The user is building an AI agent called NEXA.
+- The user is working on a particular project.
+- The user wants to complete a specific goal.
+- The user explicitly asks NEXA to remember something.
+- The user has a recurring preference that will improve future answers.
+- The user mentions an important unfinished task or a future plan.
+- The user corrects an existing memory.
+- The user reports completing an active project.
+
+### Low-value information that should generally not be saved
+
+Examples:
+
+- Casual greetings
+- Temporary small talk
+- One-off factual questions
+- Generic information that has no personal relevance
+- Repeated information already stored
+- Unsupported assumptions
+- Guesses about the user's personality
+- Information that is unlikely to be useful in future conversations
+
+### Explicit save requests
+
+If the user says:
+
+- "Remember this."
+- "Save this in your memory."
+- "Don't forget this."
+- "Keep this for future conversations."
+- "Add this to my memory."
+
+Treat this as an explicit save request, subject to applicable safety restrictions and successful persistence.
+
+If the request is ambiguous, ask a concise clarification when necessary.
+
+### Automatic importance assessment
+
+For other messages, evaluate:
+
+1. Is the information likely to matter in future conversations?
+2. Is it specific to the user or their projects?
+3. Is it stable or connected to an ongoing goal?
+4. Is it actionable in the future?
+5. Is it already stored?
+6. Is it sufficiently clear and reliable?
+7. Is it appropriate to retain?
+
+Use a practical scoring or classification mechanism.
+
+Suggested outcomes:
+
+- SAVE: clearly valuable, sufficiently reliable information.
+- UPDATE: new information corrects or extends an existing memory.
+- SKIP: low-value, redundant, temporary, or unreliable information.
+- ASK: material ambiguity requires clarification.
+
+Use thresholds and sensible rules rather than relying on an unstructured prompt alone.
+
+Automatic memory saving should be configurable in the UI.
+
+When Automatic Memory is disabled, do not create new memories automatically. Explicit user-initiated manual saves must still work.
+
+If automatic extraction fails, the chat should continue functioning normally. Never fabricate a successful save.
+
+---
+
+## 8. EXAMPLE: REMEMBERING A FUTURE PROJECT
+
+Conversation:
+
+User: "I want to build my own AI agent."
+
+NEXA should evaluate whether this represents a meaningful future goal.
+
+If sufficiently clear and useful, create a memory similar to:
+
+Title: Build a Personal AI Agent
+
+Category: Active
+
+Content: The user wants to build their own AI agent. The project is a planned goal; detailed requirements and the next steps are not yet confirmed.
+
+Status: Planned
+
+Source: Automatic
+
+Created At: Actual timestamp
+
+Confidence: Appropriate confidence based on the original message.
+
+Do not invent a deadline, technology stack, budget, or features the user never mentioned.
+
+If the user later says, "I have completed my AI agent," update the existing project memory to Completed or move the relevant historical achievement into Milestones.
+
+If the user later adds requirements, update the existing project memory or create linked memories when appropriate.
+
+Do not create a new duplicate project memory after every mention.
+
+---
+
+## 9. DUPLICATE DETECTION AND MEMORY UPDATES
+
+Before creating a memory, search for semantically similar existing memories.
+
+Use a combination of:
+
+- Exact matching where appropriate
+- Normalized text matching
+- Category and tag matching
+- Semantic similarity if embeddings are available
+
+If the same fact is already stored, do not create another copy.
+
+If new information extends an existing memory, update the existing memory while preserving important historical context when appropriate.
+
+If the new information contradicts an existing memory:
+
+1. Determine whether the information is a correction, a changed preference, or a genuine contradiction.
+2. Prefer a clear, recent user correction over an older conflicting statement.
+3. Never silently overwrite a user-verified memory with uncertain AI inference.
+4. Ask the user when the conflict cannot be safely resolved.
+5. Preserve appropriate change history if supported by the data model.
+
+Support relationships between memories, such as project goals, tasks, and milestones.
+
+---
+
+## 10. AUTOMATIC RECALL ENGINE
+
+Saving memories is not enough. NEXA must actually use them.
+
+Before generating a response, retrieve relevant memories using the current user message and conversation context.
+
+Examples:
+
+### Example A
+
+Earlier conversation:
+"I want to build my own AI agent."
+
+Future conversation:
+"I forgot what I was planning to build. Can you remind me?"
+
+Expected behavior:
+NEXA retrieves the saved memory and responds naturally:
+
+"You previously mentioned that you wanted to build your own AI agent. We haven't necessarily confirmed the full requirements yet. Would you like to continue planning it?"
+
+### Example B
+
+Earlier conversation:
+The user saved a preference for concise explanations.
+
+Future conversation:
+The user asks a technical question.
+
+Expected behavior:
+NEXA uses that preference to shape the answer when appropriate, without announcing the memory unnecessarily.
+
+### Example C
+
+Earlier conversation:
+The user is building NEXA in Google AI Studio.
+
+Future conversation:
+"Help me add another feature to my agent."
+
+Expected behavior:
+NEXA uses the project context to provide relevant guidance, but confirms details if the current project state is uncertain.
+
+### Retrieval requirements
+
+- Retrieve memories relevant to the current query, not the entire database.
+- Use keyword and semantic retrieval when practical.
+- Rank results by relevance, reliability, recency, and current status.
+- Prefer user-verified facts over uncertain inferences.
+- Distinguish historical plans from current plans.
+- Do not claim that a memory exists if retrieval found no evidence.
+- Do not invent information to fill gaps.
+- Support queries that explicitly ask for all memories, project history, unfinished goals, preferences, milestones, or previous decisions.
+
+If a relevant memory is found, provide the agent with that memory as context before generating its answer.
+
+The agent must not assume that a memory from a previous conversation is present in the current model context unless it was retrieved or loaded successfully.
+
+---
+
+## 11. MEMORY DATABASE AND PERSISTENCE
+
+Inspect the current application and choose a persistence solution appropriate to its architecture.
+
+If the application already has a database, reuse it.
+
+If no persistent backend exists, use a suitable persistent database such as Firebase Firestore or another properly supported database.
+
+Do not rely on in-memory JavaScript variables as permanent storage.
+
+Do not use browser localStorage as the sole source of truth for a multi-device, account-based long-term memory system.
+
+A local-only prototype may use local storage as a clearly identified temporary fallback, but it must not be presented as production-grade cloud persistence.
+
+Create a structured memory schema similar to:
+
+Memory {
+  id: string
+  userId: string
+  title: string
+  content: string
+  category: Identity | Preferences | Life | Active |
+            Relationships | Milestones | Behaviors
+  tags: string[]
+  source: Manual | Automatic
+  status: Active | Planned | Completed | Archived
+  verificationStatus: UserVerified | AIExtracted | Uncertain
+  confidence: number | null
+  createdAt: timestamp
+  updatedAt: timestamp
+  lastRecalledAt: timestamp | null
+  recallCount: number
+  relatedMemoryIds: string[]
+  sourceConversationId: string | null
+}
+
+Adapt this schema to the actual database's requirements. Do not store fabricated metadata or meaningless default confidence scores.
+
+Implement:
+
+- Unique memory IDs
+- Proper user ownership
+- Database reads and writes
+- Input validation
+- Safe updates and deletes
+- Loading and error handling
+- Database indexes where required
+- Pagination for larger memory collections
+- Concurrency handling where appropriate
+- Appropriate timestamps
+- Database access rules and authorization
+
+For multi-user applications, every read, update, and deletion must enforce ownership on the server side.
+
+Never expose privileged database credentials or server-side secrets in client-side code.
+
+If authentication already exists, integrate with it. If authentication does not exist, do not pretend that user-specific cloud memory is securely isolated without implementing an appropriate identity and authorization mechanism.
+
+---
+
+## 12. GEMINI INTEGRATION
+
+Use the existing Gemini integration and model configuration wherever possible.
+
+Do not unnecessarily replace the current model or rebuild the entire AI interaction pipeline.
+
+Implement structured memory extraction using the model's supported structured-output or JSON mechanisms when available.
+
+Define and validate an extraction result with fields such as:
+
+{
+  "action": "SAVE | UPDATE | SKIP | ASK",
+  "title": "string",
+  "content": "string",
+  "category": "Identity | Preferences | Life | Active | Relationships | Milestones | Behaviors",
+  "tags": [],
+  "existingMemoryId": null,
+  "reason": "brief explanation",
+  "confidence": null
+}
+
+This is a conceptual schema. Adapt it to the supported response format and validate every result before saving.
+
+The model must not be allowed to execute arbitrary database operations simply because it returned JSON. The application backend must validate and authorize every write.
+
+Do not send the entire memory database with every request. Retrieve a limited set of relevant memories to minimize latency, cost, and unnecessary data exposure.
+
+Ensure the chat remains usable if extraction, retrieval, or database services fail.
+
+---
+
+## 13. MANUAL SAVE FROM CHAT
+
+In addition to the Memory Center's Manual Save button, provide a convenient way to save information from a conversation.
+
+If practical, add a small "Save to Memory" action to assistant messages or an appropriate message menu.
+
+When clicked, allow the user to choose whether to save:
+
+- A useful fact
+- A project or goal
+- A preference
+- A task or reminder
+- A milestone
+- A custom memory
+
+Prefill the form using the selected message or text, but let the user review and edit it before saving.
+
+Never automatically save an entire conversation transcript as a memory just because the user clicked a save button on one message.
+
+---
+
+## 14. MEMORY MANAGEMENT SETTINGS
+
+Add a settings section within the Memory Center.
+
+Include:
+
+- Automatic Memory: On/Off
+- Show a brief notification when a new memory is saved automatically, where appropriate
+- Option to review AI-extracted memories
+- Option to export memories in JSON format
+- Option to delete all memories with explicit confirmation
+- Clear explanation of what information is stored and how it is used
+
+If a review-before-saving mode is implemented, AI-extracted candidates must remain pending until the user approves them. Pending candidates must not be treated as confirmed long-term memories.
+
+Deleting all memories must actually delete the relevant records belonging to the authenticated user. Handle related embeddings, search indexes, and derived records where applicable.
+
+Do not claim that exported, deleted, or saved data has been processed successfully until the relevant operation confirms success.
+
+---
+
+## 15. PRIVACY AND SECURITY
+
+Treat memory as user-controlled data.
+
+Requirements:
+
+- Do not store passwords, API keys, access tokens, or authentication secrets.
+- Avoid retaining unnecessary sensitive personal information.
+- Apply additional safeguards to sensitive health, financial, identity, and third-party information.
+- Follow applicable platform safety requirements.
+- Never allow one user's memories to be retrieved by another user.
+- Validate and sanitize input.
+- Treat conversation content as data, not as privileged application instructions.
+- Do not let memory content override system instructions or security rules.
+- Do not execute instructions embedded in retrieved memories.
+- Provide reliable deletion and export operations.
+- Never claim that memory is permanently deleted from every backup unless the actual retention system guarantees it.
+
+Memory should personalize NEXA without compromising user privacy or safety.
+
+---
+
+## 16. USER INTERFACE AND DESIGN QUALITY
+
+Preserve the existing NEXA visual identity.
+
+The Memory Center should feel like a native part of NEXA, not an unrelated dashboard.
+
+Design requirements:
+
+- Clean, modern interface
+- Consistent typography and spacing
+- Clear category navigation
+- Readable memory cards
+- Responsive desktop and mobile layouts
+- Accessible labels and keyboard navigation
+- Confirmation dialogs for destructive actions
+- Useful empty states
+- Search and filter controls
+- Clear save and update feedback
+- Smooth interactions without unnecessary animations
+- Support the application's existing light/dark theme if available
+
+Use the existing UI library and component patterns wherever possible.
+
+Avoid placeholder buttons, fake counters, hardcoded example memories, and nonfunctional controls in the final implementation.
+
+---
+
+## 17. PERFORMANCE AND COST
+
+Keep the system efficient.
+
+- Do not make an additional Gemini request for every message if the message can be confidently classified as irrelevant using inexpensive rules.
+- Avoid unbounded memory retrieval.
+- Deduplicate before inserting records.
+- Use asynchronous extraction when safe and appropriate.
+- Do not block ordinary chat responses on nonessential memory extraction.
+- Make sure asynchronous saves cannot silently fail.
+- Use retry logic only where appropriate and avoid duplicate writes.
+- Add appropriate database indexes.
+- Handle rate limits and temporary service failures.
+- Keep the memory context within the model's token budget.
+
+For important explicit save requests, prioritize reliable confirmation that the save actually completed.
+
+---
+
+## 18. IMPLEMENTATION AND TESTING REQUIREMENTS
+
+Before changing the project:
+
+1. Inspect the existing codebase and identify the chat flow, model integration, UI entry points, database configuration, and authentication.
+2. Determine the smallest reliable set of changes needed.
+3. Preserve existing functionality.
+
+Then implement the complete feature.
+
+Test these scenarios:
+
+TEST 1: Manual creation
+Create a memory from the Memory Center and verify it appears in the correct category.
+
+TEST 2: Editing
+Change a memory title and content, refresh the page, and verify the changes persist.
+
+TEST 3: Deletion
+Delete a memory and verify it is actually absent from persistent storage.
+
+TEST 4: Automatic extraction
+Mention a meaningful future project and verify the extraction process creates an appropriate memory when automatic saving is enabled.
+
+TEST 5: Low-value conversation
+Send a casual greeting and verify it does not create unnecessary memories.
+
+TEST 6: Duplicate prevention
+Mention the same project multiple times and verify the system does not create redundant memories.
+
+TEST 7: Cross-conversation recall
+Save a project, start a new conversation, ask what project was previously discussed, and verify the agent retrieves the stored project.
+
+TEST 8: Status updates
+Mark a planned project as completed and verify the active state and historical milestone are handled appropriately.
+
+TEST 9: Automatic Memory disabled
+Turn off automatic saving and verify new messages do not create automatic memories.
+
+TEST 10: Database failure
+Simulate a failed write and verify the UI does not report a successful save.
+
+TEST 11: Ownership
+Verify that an authenticated user cannot access, edit, or delete another user's memories.
+
+TEST 12: Responsive UI
+Verify the Memory Center remains usable on desktop and mobile.
+
+TEST 13: Existing functionality
+Verify ordinary chat, existing integrations, and the original NEXA interface still work.
+
+Fix any issues discovered during testing.
+
+---
+
+## 19. FINAL ACCEPTANCE CRITERIA
+
+The feature is complete only when:
+
+- The Memory Center button works.
+- All eight categories are functional.
+- Manual Save works.
+- Users can create, edit, search, filter, and delete memories.
+- Memories persist beyond refreshes and new conversations.
+- Automatic memory extraction works when enabled.
+- Duplicate detection and updates work.
+- Relevant memories are retrieved before the agent answers.
+- The agent can recall meaningful projects and plans from previous conversations.
+- Privacy and ownership checks are implemented where applicable.
+- The UI has proper loading, success, and error states.
+- Existing NEXA functionality remains intact.
+- No critical feature is represented by a nonfunctional placeholder.
+
+After implementation, provide a concise engineering report describing:
+
+1. Files and components changed.
+2. Database and schema used.
+3. How automatic memory extraction works.
+4. How long-term recall works.
+5. Any required environment variables or API configuration.
+6. Any required database setup, security rules, or migrations.
+7. Tests performed and their actual results.
+8. Any remaining limitations or incomplete features.
+
+Do not report a test as passed unless it was actually performed.
+
+If a feature requires configuration outside the current environment, implement as much as possible and clearly explain the remaining setup steps.
+
+Now inspect the existing NEXA project and implement this system end to end.

@@ -1,0 +1,37 @@
+{
+  "manifest_version": 3,
+  "name": "NEXA Chrome Companion Operator",
+  "version": "1.2.0",
+  "description": "Real Chrome tab automation, Google/YouTube controller, web extractor, and AI platform prompt operator for Bhavik's NEXA OS.",
+  "permissions": [
+    "tabs",
+    "activeTab",
+    "scripting",
+    "storage",
+    "alarms"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "http://localhost:3000/*",
+        "http://127.0.0.1:3000/*",
+        "https://*.run.app/*"
+      ],
+      "js": [
+        "content_bridge.js"
+      ],
+      "all_frames": true,
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "NEXA Browser Operator"
+  }
+}

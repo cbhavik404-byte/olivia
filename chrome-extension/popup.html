@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>NEXA Chrome Companion</title>
+  <style>
+    body {
+      width: 330px;
+      margin: 0;
+      padding: 14px;
+      font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+      background: #090d16;
+      color: #f8fafc;
+    }
+    .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+    .badge { padding: 3px 8px; border-radius: 999px; font-size: 10px; font-weight: 700; }
+    .connected { background: rgba(16,185,129,0.2); color: #34d399; border: 1px solid rgba(16,185,129,0.4); }
+    .offline { background: rgba(245,158,11,0.2); color: #fbbf24; border: 1px solid rgba(245,158,11,0.4); }
+    .meta { font-size: 11px; color: #94a3b8; margin-bottom: 10px; background: #0f172a; padding: 7px 9px; border-radius: 8px; border: 1px solid #1e293b; }
+    label { display: block; font-size: 11px; color: #94a3b8; margin-bottom: 4px; }
+    input { width: 100%; box-sizing: border-box; padding: 8px; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: #fff; font-size: 11px; margin-bottom: 10px; }
+    .row { display: flex; gap: 8px; }
+    button { flex: 1; padding: 8px; border-radius: 8px; border: none; background: #06b6d4; color: #020617; font-weight: 700; cursor: pointer; font-size: 12px; }
+    button:hover { background: #22d3ee; }
+    button.secondary { background: #1e293b; color: #e2e8f0; border: 1px solid #334155; }
+    button.secondary:hover { background: #334155; }
+    p { font-size: 11px; color: #94a3b8; line-height: 1.4; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <strong>NEXA Operator v1.2</strong>
+    <span id="statusBadge" class="badge offline">CHECKING</span>
+  </div>
+  <div id="statusMeta" class="meta">Detecting open NEXA &amp; AI Studio tabs...</div>
+  <label for="wsInput">NEXA Relay WebSocket URL</label>
+  <input id="wsInput" type="text" placeholder="ws://localhost:3000/api/browser-ws?role=extension" />
+  <div class="row">
+    <button id="scanBtn">Connect Open Tabs</button>
+    <button id="saveBtn" class="secondary">Save WS</button>
+  </div>
+  <p>Pairs automatically with any open AI Studio, Cloud Run, or localhost NEXA tab for real Google search, YouTube playback, and ChatGPT/Claude/Gemini/Grok prompt typing.</p>
+  <script src="popup.js"></script>
+</body>
+</html>
